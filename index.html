@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Glory Bound — Your AI life coach that comes to you. Morning briefings, check-ins, and motivation calls. Your coach calls you." />
+  <title>Glory Bound — Your AI Life Coach</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Reset & base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0a1a;
+      --surface:   #0f0f2e;
+      --card:      #12122a;
+      --purple:    #7c3aed;
+      --purple-lt: #9f6ef5;
+      --blue:      #3b82f6;
+      --blue-lt:   #60a5fa;
+      --text:      #f8fafc;
+      --muted:     #94a3b8;
+      --border:    rgba(124,58,237,.25);
+      --glow-p:    rgba(124,58,237,.45);
+      --glow-b:    rgba(59,130,246,.35);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; line-height: 1.2; }
+
+    a { color: inherit; text-decoration: none; }
+
+    img { display: block; max-width: 100%; }
+
+    /* ─── Utility ───────────────────────────────────────────────── */
+    .container {
+      width: min(1140px, 100%);
+      margin-inline: auto;
+      padding-inline: 1.5rem;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--purple-lt);
+      background: rgba(124,58,237,.12);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: .35rem .9rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 560px;
+      margin-inline: auto;
+    }
+
+    /* scroll-reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Nav ───────────────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.1rem 0;
+      transition: background .3s, box-shadow .3s;
+    }
+    .nav.scrolled {
+      background: rgba(10,10,26,.88);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 rgba(124,58,237,.15);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--purple-lt), var(--blue-lt));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: .9rem;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    @media (max-width: 640px) { .nav-links { display: none; } }
+
+    /* ─── Hero ──────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 9rem 1.5rem 6rem;
+      overflow: hidden;
+    }
+
+    /* animated gradient backdrop */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,.35) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(59,130,246,.2) 0%, transparent 65%),
+        var(--bg);
+      z-index: 0;
+    }
+
+    /* particle canvas */
+    #particles { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+
+    .hero-content { position: relative; z-index: 2; max-width: 780px; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--purple-lt);
+      background: rgba(124,58,237,.12);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: .4rem 1rem;
+      margin-bottom: 1.6rem;
+      animation: fadeDown .8s ease both;
+    }
+    .hero-badge span { width: 8px; height: 8px; border-radius: 50%; background: var(--purple-lt); animation: pulse 2s infinite; }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 900;
+      letter-spacing: -.02em;
+      animation: fadeUp .9s .15s ease both;
+    }
+    .hero-title .gradient-text {
+      background: linear-gradient(135deg, var(--purple-lt) 0%, var(--blue-lt) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .glow-text {
+      text-shadow:
+        0 0 40px rgba(124,58,237,.5),
+        0 0 80px rgba(59,130,246,.25);
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--muted);
+      margin-top: .9rem;
+      animation: fadeUp .9s .3s ease both;
+    }
+    .hero-tagline strong { color: var(--text); }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2.4rem;
+      animation: fadeUp .9s .45s ease both;
+    }
+
+    /* ─── Buttons ───────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .85rem 1.8rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: .95rem;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s, filter .2s;
+      border: none;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-3px); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      color: #fff;
+      box-shadow: 0 4px 24px var(--glow-p);
+    }
+    .btn-primary:hover { box-shadow: 0 8px 36px var(--glow-p); filter: brightness(1.1); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid rgba(255,255,255,.2);
+    }
+    .btn-outline:hover {
+      border-color: var(--purple-lt);
+      box-shadow: 0 4px 20px var(--glow-p);
+    }
+
+    .btn svg { flex-shrink: 0; }
+
+    /* hero scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .4rem;
+      color: var(--muted);
+      font-size: .75rem;
+      animation: fadeUp 1s .9s ease both;
+    }
+    .scroll-hint .mouse {
+      width: 22px; height: 36px;
+      border: 1.5px solid rgba(255,255,255,.25);
+      border-radius: 999px;
+      display: flex;
+      justify-content: center;
+      padding-top: 6px;
+    }
+    .scroll-hint .mouse::after {
+      content: '';
+      width: 3px; height: 8px;
+      background: var(--purple-lt);
+      border-radius: 999px;
+      animation: scrollDot 1.6s infinite;
+    }
+
+    /* ─── Features ──────────────────────────────────────────────── */
+    .features {
+      padding: 6rem 0;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--surface) 100%);
+    }
+
+    .features-header { text-align: center; margin-bottom: 3.5rem; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: transform .3s, box-shadow .3s, border-color .3s;
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--purple);
+      box-shadow: 0 12px 40px var(--glow-p);
+    }
+
+    .feature-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .feature-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+    }
+
+    .feature-desc {
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.65;
+    }
+
+    /* ─── How It Works ──────────────────────────────────────────── */
+    .how {
+      padding: 6rem 0;
+      background: var(--surface);
+    }
+
+    .how-header { text-align: center; margin-bottom: 3.5rem; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      position: relative;
+    }
+
+    /* connector line (desktop only) */
+    @media (min-width: 820px) {
+      .steps::before {
+        content: '';
+        position: absolute;
+        top: 3.5rem;
+        left: calc(16.67% + 1.5rem);
+        right: calc(16.67% + 1.5rem);
+        height: 2px;
+        background: linear-gradient(90deg, var(--purple), var(--blue));
+        opacity: .4;
+        z-index: 0;
+      }
+    }
+
+    .step {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2.2rem 1.5rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      transition: transform .3s, border-color .3s, box-shadow .3s;
+    }
+    .step:hover {
+      transform: translateY(-6px);
+      border-color: var(--blue);
+      box-shadow: 0 12px 40px var(--glow-b);
+    }
+
+    .step-number {
+      width: 3.2rem; height: 3.2rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin: 0 auto 1.2rem;
+      box-shadow: 0 4px 20px var(--glow-p);
+    }
+
+    .step-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+    }
+
+    .step-desc {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    /* ─── Download ──────────────────────────────────────────────── */
+    .download {
+      padding: 6rem 0;
+      background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+    }
+
+    .download-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 2.5rem;
+    }
+
+    .download-text .section-subtitle { max-width: 480px; }
+
+    .store-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      justify-content: center;
+    }
+
+    .store-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .9rem;
+      padding: .9rem 1.8rem;
+      background: rgba(255,255,255,.05);
+      border: 1.5px solid rgba(255,255,255,.15);
+      border-radius: 14px;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+      min-width: 190px;
+    }
+    .store-badge:hover {
+      transform: translateY(-3px);
+      border-color: var(--purple-lt);
+      box-shadow: 0 8px 28px var(--glow-p);
+    }
+    .store-badge-text { text-align: left; }
+    .store-badge-sub { font-size: .7rem; color: var(--muted); letter-spacing: .05em; }
+    .store-badge-name { font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 700; }
+
+    .coming-soon-note {
+      font-size: .82rem;
+      color: var(--muted);
+      margin-top: -.8rem;
+    }
+    .coming-soon-note span {
+      display: inline-block;
+      background: rgba(124,58,237,.15);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: .25rem .75rem;
+      color: var(--purple-lt);
+      font-weight: 500;
+    }
+
+    /* philosophy quote */
+    .quote-block {
+      position: relative;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 2rem 2.5rem;
+      background: linear-gradient(135deg, rgba(124,58,237,.1), rgba(59,130,246,.08));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+    }
+    .quote-block::before {
+      content: '"';
+      position: absolute;
+      top: -1.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 5rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 900;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--purple-lt), var(--blue-lt));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .quote-block p {
+      font-size: 1.15rem;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ─── Footer ────────────────────────────────────────────────── */
+    .footer {
+      background: var(--bg);
+      border-top: 1px solid rgba(255,255,255,.06);
+      padding: 3rem 0 2rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .footer-brand { display: flex; flex-direction: column; gap: .3rem; }
+    .footer-logo {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--purple-lt), var(--blue-lt));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .footer-slogan { font-size: .82rem; color: var(--muted); }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      list-style: none;
+    }
+    .footer-links a {
+      font-size: .85rem;
+      color: var(--muted);
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--purple-lt); }
+
+    .footer-copy {
+      width: 100%;
+      text-align: center;
+      font-size: .8rem;
+      color: var(--muted);
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,.05);
+    }
+
+    /* ─── Keyframes ─────────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .5; transform: scale(.75); }
+    }
+    @keyframes scrollDot {
+      0%   { opacity: 1; transform: translateY(0); }
+      80%  { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 0; transform: translateY(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    /* ─── Responsive tweaks ─────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .hero-cta { flex-direction: column; align-items: center; }
+      .btn { width: 100%; justify-content: center; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────────────── -->
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <span class="nav-logo">Glory Bound</span>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#download">Download</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────────────── -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <canvas id="particles"></canvas>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span></span>
+      AI-Powered Life Coach
+    </div>
+
+    <h1 class="hero-title">
+      <span class="gradient-text glow-text">Glory Bound</span><br />
+      Your AI life coach<br />that comes to you
+    </h1>
+
+    <p class="hero-tagline">
+      <strong>Stop managing your productivity app.</strong>
+      Let it manage you.
+    </p>
+
+    <div class="hero-cta">
+      <a href="#download" class="btn btn-primary" aria-label="Download on App Store — coming soon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download on App Store
+      </a>
+      <a href="#download" class="btn btn-outline" aria-label="Get it on Google Play — coming soon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.18 23.76c.32.18.69.17 1.01-.03L17.14 12 3.19.27C2.87.07 2.5.06 2.18.24 1.86.43 1.67.78 1.67 1.15v21.7c0 .37.19.72.51.91z"/><path d="M20.04 9.75l-2.09-1.21L14.94 12l3.01 3.46 2.09-1.21c.89-.52.89-1.74 0-2.5z"/><path d="M3.19.27l13.18 7.58-2.73 3.14L3.18.27z"/><path d="M3.18 23.73l10.46-10.73 2.73 3.14-13.18 7.58-.01.01z"/></svg>
+        Get it on Google Play
+      </a>
+    </div>
+  </div>
+
+  <div class="scroll-hint" aria-hidden="true">
+    <div class="mouse"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ── FEATURES ──────────────────────────────────────────────────────── -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="features-header reveal">
+      <div class="section-label">Features</div>
+      <h2 class="section-title">Everything you need to live your best life</h2>
+      <p class="section-subtitle">No more opening apps. No more forgetting goals. Your coach handles it all.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <span class="feature-icon" aria-hidden="true">🤖</span>
+        <h3 class="feature-title">AI That Reaches Out</h3>
+        <p class="feature-desc">Morning briefings, check-ins, and motivation calls. Your coach calls <em>you</em> — not the other way around.</p>
+      </div>
+
+      <div class="feature-card reveal">
+        <span class="feature-icon" aria-hidden="true">🎯</span>
+        <h3 class="feature-title">3-Tier Goal System</h3>
+        <p class="feature-desc">Pathways → Milestones → Routines. Break big dreams into daily habits and track real progress effortlessly.</p>
+      </div>
+
+      <div class="feature-card reveal">
+        <span class="feature-icon" aria-hidden="true">🗣️</span>
+        <h3 class="feature-title">Voice First</h3>
+        <p class="feature-desc">Speak naturally. "I went to the gym" → logged instantly, streaks updated, coach notified. Zero tapping required.</p>
+      </div>
+
+      <div class="feature-card reveal">
+        <span class="feature-icon" aria-hidden="true">📱</span>
+        <h3 class="feature-title">WhatsApp Integration</h3>
+        <p class="feature-desc">Your AI coach messages you proactively on WhatsApp. Reply in plain English — it handles the rest.</p>
+      </div>
+
+      <div class="feature-card reveal">
+        <span class="feature-icon" aria-hidden="true">🏆</span>
+        <h3 class="feature-title">Rewards &amp; Streaks</h3>
+        <p class="feature-desc">Virtual currency, streak tracking, and real accountability to keep you motivated and on track every single day.</p>
+      </div>
+
+      <div class="feature-card reveal">
+        <span class="feature-icon" aria-hidden="true">📓</span>
+        <h3 class="feature-title">Diary &amp; Reflection</h3>
+        <p class="feature-desc">Rich daily diary with images, voice notes, and AI-powered insights. Your life, beautifully documented.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ───────────────────────────────────────────────────── -->
+<section class="how" id="how">
+  <div class="container">
+    <div class="how-header reveal">
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">Three steps to a better life</h2>
+      <p class="section-subtitle">Getting started is effortless. Your coach does the heavy lifting from day one.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-number">1</div>
+        <h3 class="step-title">Set your Pathways</h3>
+        <p class="step-desc">Tell Glory Bound your big life goals — your Pathways. Health, career, relationships, finances. Whatever matters most to you.</p>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-number">2</div>
+        <h3 class="step-title">AI builds your Routines</h3>
+        <p class="step-desc">Your AI coach automatically breaks Pathways into Milestones and daily Routines — a personalised action plan built just for you.</p>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-number">3</div>
+        <h3 class="step-title">Just live your life</h3>
+        <p class="step-desc">Your coach checks in via call, WhatsApp, and voice. Log updates in seconds. Track progress automatically. You focus on living.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DOWNLOAD ──────────────────────────────────────────────────────── -->
+<section class="download" id="download">
+  <div class="container">
+    <div class="download-inner">
+
+      <div class="quote-block reveal">
+        <p>You shouldn't have to remember to use a productivity app. Your coach should come to you.</p>
+      </div>
+
+      <div class="download-text reveal" style="text-align:center;">
+        <div class="section-label">Download</div>
+        <h2 class="section-title">Ready to meet your coach?</h2>
+        <p class="section-subtitle">Available on iOS and Android. Your life transformation starts today.</p>
+      </div>
+
+      <div class="store-badges reveal">
+        <a href="#download" class="store-badge" aria-label="Download on the App Store — coming soon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          <div class="store-badge-text">
+            <div class="store-badge-sub">Download on the</div>
+            <div class="store-badge-name">App Store</div>
+          </div>
+        </a>
+
+        <a href="#download" class="store-badge" aria-label="Get it on Google Play — coming soon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M3.18 23.76c.32.18.69.17 1.01-.03L17.14 12 3.19.27C2.87.07 2.5.06 2.18.24 1.86.43 1.67.78 1.67 1.15v21.7c0 .37.19.72.51.91z"/><path d="M20.04 9.75l-2.09-1.21L14.94 12l3.01 3.46 2.09-1.21c.89-.52.89-1.74 0-2.5z"/><path d="M3.19.27l13.18 7.58-2.73 3.14L3.18.27z"/><path d="M3.18 23.73l10.46-10.73 2.73 3.14-13.18 7.58-.01.01z"/></svg>
+          <div class="store-badge-text">
+            <div class="store-badge-sub">Get it on</div>
+            <div class="store-badge-name">Google Play</div>
+          </div>
+        </a>
+      </div>
+
+      <p class="coming-soon-note reveal"><span>🚀 Coming Soon</span> — Be the first to know when we launch</p>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">Glory Bound</span>
+        <span class="footer-slogan">Your AI life coach that comes to you</span>
+      </div>
+      <ul class="footer-links">
+        <li><a href="#" aria-label="Privacy Policy — coming soon">Privacy Policy</a></li>
+        <li><a href="#" aria-label="Terms of Service — coming soon">Terms of Service</a></li>
+      </ul>
+    </div>
+    <p class="footer-copy">© 2025 Glory Bound. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  /* ── Sticky nav ─────────────────────────────────────────────────── */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 30);
+  }, { passive: true });
+
+  /* ── Particle canvas ─────────────────────────────────────────────── */
+  (function () {
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resize() {
+      W = canvas.width  = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+
+    function Particle() {
+      this.reset();
+    }
+    Particle.prototype.reset = function () {
+      this.x  = Math.random() * W;
+      this.y  = Math.random() * H;
+      this.r  = Math.random() * 1.6 + .4;
+      this.vx = (Math.random() - .5) * .4;
+      this.vy = (Math.random() - .5) * .4;
+      this.a  = Math.random() * .5 + .15;
+    };
+
+    function init() {
+      resize();
+      particles = Array.from({ length: 90 }, () => new Particle());
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > W || p.y < 0 || p.y > H) p.reset();
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        const color = Math.random() > .5
+          ? `rgba(124,58,237,${p.a})`
+          : `rgba(59,130,246,${p.a})`;
+        ctx.fillStyle = color;
+        ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+
+    init();
+    draw();
+    window.addEventListener('resize', () => { resize(); }, { passive: true });
+  })();
+
+  /* ── Scroll reveal ──────────────────────────────────────────────── */
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  revealEls.forEach(el => observer.observe(el));
+
+  /* ── Stagger feature cards ──────────────────────────────────────── */
+  document.querySelectorAll('.features-grid .feature-card').forEach((card, i) => {
+    card.style.transitionDelay = `${i * 0.08}s`;
+  });
+  document.querySelectorAll('.steps .step').forEach((step, i) => {
+    step.style.transitionDelay = `${i * 0.1}s`;
+  });
+</script>
+</body>
+</html>
