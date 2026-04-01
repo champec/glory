@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Glory Bound Terms and Conditions — The rules that govern your use of our service." />
+  <title>Terms and Conditions — Glory Bound</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Reset & base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0a1a;
+      --surface:   #0f0f2e;
+      --card:      #12122a;
+      --purple:    #7c3aed;
+      --purple-lt: #9f6ef5;
+      --blue:      #3b82f6;
+      --blue-lt:   #60a5fa;
+      --text:      #f8fafc;
+      --muted:     #94a3b8;
+      --border:    rgba(124,58,237,.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; line-height: 1.25; }
+
+    a { color: var(--purple-lt); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ─── Utility ───────────────────────────────────────────────── */
+    .container {
+      width: min(860px, 100%);
+      margin-inline: auto;
+      padding-inline: 1.5rem;
+    }
+
+    /* ─── Nav ───────────────────────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,10,26,.92);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 rgba(124,58,237,.15);
+      padding: 1.1rem 0;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--purple-lt), var(--blue-lt));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+    .nav-back {
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color .2s;
+    }
+    .nav-back:hover { color: var(--text); text-decoration: none; }
+
+    /* ─── Page header ───────────────────────────────────────────── */
+    .page-header {
+      padding: 5rem 0 3rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .page-header .label {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--purple-lt);
+      background: rgba(124,58,237,.12);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: .35rem .9rem;
+      margin-bottom: 1.1rem;
+    }
+    .page-header h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      margin-bottom: .75rem;
+    }
+    .page-header p {
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    /* ─── Content ───────────────────────────────────────────────── */
+    .content {
+      padding: 3.5rem 0 5rem;
+    }
+
+    .content section {
+      margin-bottom: 2.8rem;
+    }
+
+    .content h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: .75rem;
+      color: var(--text);
+    }
+
+    .content p {
+      color: var(--muted);
+      margin-bottom: .85rem;
+    }
+
+    .content ul {
+      list-style: disc;
+      padding-left: 1.4rem;
+      color: var(--muted);
+      margin-bottom: .85rem;
+    }
+
+    .content ul li {
+      margin-bottom: .4rem;
+    }
+
+    .content a {
+      color: var(--purple-lt);
+    }
+
+    /* ─── Footer ────────────────────────────────────────────────── */
+    .footer {
+      background: var(--bg);
+      border-top: 1px solid rgba(255,255,255,.06);
+      padding: 3rem 0 2rem;
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+    .footer-brand { display: flex; flex-direction: column; gap: .3rem; }
+    .footer-logo {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--purple-lt), var(--blue-lt));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .footer-slogan { font-size: .82rem; color: var(--muted); }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      list-style: none;
+    }
+    .footer-links a {
+      font-size: .85rem;
+      color: var(--muted);
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--purple-lt); text-decoration: none; }
+    .footer-copy {
+      width: 100%;
+      text-align: center;
+      font-size: .8rem;
+      color: var(--muted);
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,.05);
+    }
+
+    @media (max-width: 480px) {
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────────────── -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo">Glory Bound</a>
+    <a href="index.html" class="nav-back">← Back to Home</a>
+  </div>
+</nav>
+
+<!-- ── PAGE HEADER ───────────────────────────────────────────────────── -->
+<header class="page-header">
+  <div class="container">
+    <span class="label">Legal</span>
+    <h1>Terms and Conditions</h1>
+    <p>Last updated: March 31, 2025</p>
+  </div>
+</header>
+
+<!-- ── CONTENT ───────────────────────────────────────────────────────── -->
+<main class="content">
+  <div class="container">
+
+    <section>
+      <h2>1. Acceptance of Terms</h2>
+      <p>By downloading, installing, or using the Glory Bound application or any related services (collectively, the "Service"), you agree to be bound by these Terms and Conditions ("Terms"). If you do not agree, please do not use the Service.</p>
+      <p>We reserve the right to update these Terms at any time. Continued use of the Service after changes are posted constitutes acceptance of the revised Terms.</p>
+    </section>
+
+    <section>
+      <h2>2. Description of Service</h2>
+      <p>Glory Bound is an AI-powered life coaching service that proactively contacts you via phone calls to deliver personalised morning briefings, check-ins, motivation, and accountability support. The Service is intended as a personal productivity and wellness tool and does not constitute professional psychological, medical, or financial advice.</p>
+    </section>
+
+    <section>
+      <h2>3. Eligibility</h2>
+      <p>You must be at least 13 years of age (or the applicable age of digital consent in your jurisdiction) to use the Service. By using the Service, you represent and warrant that you meet this requirement.</p>
+    </section>
+
+    <section>
+      <h2>4. Account Registration</h2>
+      <p>To access the Service you must create an account. You agree to:</p>
+      <ul>
+        <li>Provide accurate, current, and complete information during registration.</li>
+        <li>Maintain the security of your password and accept responsibility for all activity under your account.</li>
+        <li>Notify us immediately of any unauthorised use of your account.</li>
+      </ul>
+      <p>We reserve the right to terminate accounts that contain inaccurate information or that violate these Terms.</p>
+    </section>
+
+    <section>
+      <h2>5. Phone Calls and Communications</h2>
+      <p>By providing your phone number and enabling coaching calls, you expressly consent to receive automated or AI-generated calls from Glory Bound at the number you provide. You may manage call scheduling or opt out of calls at any time through the app settings.</p>
+      <p>Standard carrier rates may apply. Glory Bound is not responsible for any charges imposed by your mobile carrier.</p>
+    </section>
+
+    <section>
+      <h2>6. Acceptable Use</h2>
+      <p>You agree not to:</p>
+      <ul>
+        <li>Use the Service for any unlawful purpose or in violation of these Terms.</li>
+        <li>Attempt to reverse engineer, decompile, or disassemble any part of the Service.</li>
+        <li>Use automated tools (bots, scrapers, etc.) to access or interact with the Service.</li>
+        <li>Transmit any harmful, offensive, or disruptive content through the Service.</li>
+        <li>Impersonate any person or entity or misrepresent your affiliation with any person or entity.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>7. Intellectual Property</h2>
+      <p>All content, features, and functionality of the Service — including but not limited to text, graphics, logos, and software — are the exclusive property of Glory Bound and its licensors, protected by applicable intellectual property laws. You are granted a limited, non-exclusive, non-transferable licence to use the Service for personal, non-commercial purposes only.</p>
+    </section>
+
+    <section>
+      <h2>8. Disclaimers</h2>
+      <p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.</p>
+      <p>Glory Bound does not warrant that the Service will be uninterrupted, error-free, or free of viruses or other harmful components. AI-generated coaching content is not a substitute for professional advice.</p>
+    </section>
+
+    <section>
+      <h2>9. Limitation of Liability</h2>
+      <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, GLORY BOUND AND ITS OFFICERS, DIRECTORS, EMPLOYEES, AND AGENTS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING OUT OF OR RELATED TO YOUR USE OF THE SERVICE, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</p>
+    </section>
+
+    <section>
+      <h2>10. Indemnification</h2>
+      <p>You agree to indemnify, defend, and hold harmless Glory Bound and its affiliates from and against any claims, liabilities, damages, losses, and expenses (including reasonable legal fees) arising out of or in any way connected with your access to or use of the Service or your violation of these Terms.</p>
+    </section>
+
+    <section>
+      <h2>11. Termination</h2>
+      <p>We may suspend or terminate your access to the Service at any time, without notice, for conduct that we believe violates these Terms or is harmful to other users, us, or third parties, or for any other reason at our sole discretion.</p>
+      <p>You may delete your account at any time through the app settings. Termination does not relieve you of any obligations incurred prior to termination.</p>
+    </section>
+
+    <section>
+      <h2>12. Governing Law</h2>
+      <p>These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which Glory Bound is incorporated, without regard to its conflict of law provisions.</p>
+    </section>
+
+    <section>
+      <h2>13. Changes to These Terms</h2>
+      <p>We reserve the right to modify these Terms at any time. We will notify you of material changes by updating the "Last updated" date or through an in-app notification. It is your responsibility to review these Terms periodically.</p>
+    </section>
+
+    <section>
+      <h2>14. Contact Us</h2>
+      <p>If you have questions about these Terms, please contact us at:</p>
+      <ul>
+        <li>Email: <a href="mailto:legal@glorybound.app">legal@glorybound.app</a></li>
+      </ul>
+    </section>
+
+  </div>
+</main>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">Glory Bound</span>
+        <span class="footer-slogan">Your AI life coach that comes to you</span>
+      </div>
+      <ul class="footer-links">
+        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="terms-and-conditions.html">Terms of Service</a></li>
+      </ul>
+    </div>
+    <p class="footer-copy">© 2025 Glory Bound. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
